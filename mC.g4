@@ -1,20 +1,14 @@
 grammar mC;
 
-start: 
-(statementMultiple | statementSingle) EOF;
+start: statement* EOF;
 
-statement: statementSingle | statementMultiple;
-statementMultiple: ParCurBeg statementSingle* ParCurEnd;
-statementSingle:
-	expression Semicolon
-	| stFunctionCall
+statement:
+	ParCurBeg statement* ParCurEnd
+	| expression Semicolon
 	| stIf
 	| stWhile
 	| stDoWhile
 	| stFor;
-
-stFunctionCall:
-	Variable ParRoundBeg (value (Comma value)*)? ParRoundEnd Semicolon;
 
 stIf:
 	If ParRoundBeg expression ParRoundEnd statement (
@@ -30,9 +24,10 @@ value: expression | String;
 
 // operators by precedence 
 expression:
+	// function call
+	Variable ParRoundBeg arguments ParRoundEnd
 	// ++ -- - + ! ~
-	((OpInc | OpDec) Variable)
-
+	| ((OpInc | OpDec) Variable)
 	| ((OpPlus | OpMinus | OpBitNeg | OpNeg) expression)
 	//    * / %
 	| expression (OpMul | OpDiv | OpMod) expression
@@ -59,8 +54,10 @@ expression:
 	| Boolean
 	| Number
 	| String
-	| Variable
-	;
+	| Char
+	| Variable;
+
+arguments:(expression (Comma expression)*)?;
 
 opAssingAny:
 	OpAssign
@@ -82,6 +79,7 @@ Boolean: (True | False);
  */
 
 String: '"' ('\\"' | .)*? '"';
+Char: '\'' ('\\' . | .) '\'';
 
 // special symbols
 Semicolon: ';';
@@ -158,7 +156,7 @@ fragment NumberPrefBin: '0' ('b' | 'B');
 fragment NumberPrefHex: '0' ('x' | 'X');
 
 fragment Digits: [0-9]+;
-fragment Char: [a-zA-Z];
+fragment AZ: [a-zA-Z];
 
-Variable: Char (Char | Digits)*;
+Variable: AZ (AZ | Digits)*;
 Number: (NumberPrefBin | NumberPrefHex)? Digits+;
