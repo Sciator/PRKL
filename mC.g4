@@ -5,73 +5,62 @@ start:
 
 statement: statementSingle | statementMultiple;
 statementMultiple: ParCurBeg statementSingle* ParCurEnd;
-statementSingle: exAssign Semicolon | stFunctionCall | stIf | stWhile | stDoWhile;
+statementSingle:
+	expression Semicolon
+	| stFunctionCall
+	| stIf
+	| stWhile
+	| stDoWhile
+	| stFor;
 
 stFunctionCall:
 	Variable ParRoundBeg (value (Comma value)*)? ParRoundEnd Semicolon;
 
-stIf: If ParRoundBeg expression ParRoundEnd statement (Else statement)?;
+stIf:
+	If ParRoundBeg expression ParRoundEnd statement (
+		Else statement
+	)?;
 stWhile: While ParRoundBeg expression ParRoundEnd statement;
-stDoWhile: Do statement While ParRoundBeg expression ParRoundEnd Semicolon;
+stDoWhile:
+	Do statement While ParRoundBeg expression ParRoundEnd Semicolon;
+stFor:
+	For ParRoundBeg expression? Semicolon expression? Semicolon expression? ParRoundEnd statement;
 
 value: expression | String;
 
-expression: exAssign | exBinOr
-	;
+// operators by precedence 
+expression:
+	// ++ -- - + ! ~
+	((OpInc | OpDec) Variable)
 
-// operators by precedence ++ -- - + ! ~
-exUnaryIncDec: 
-Variable
-	| Number
+	| ((OpPlus | OpMinus | OpBitNeg | OpNeg) expression)
+	//    * / %
+	| expression (OpMul | OpDiv | OpMod) expression
+	//    + -
+	| expression (OpPlus | OpMinus) expression
+	// << >> 
+	| expression (OpBitShiftLeft | OpBitShiftRight) expression
+	// == != 
+	| expression (OpEq | OpEqNot) expression
+	// < > <= >= 
+	| expression (OpGt | OpGte | OpLt | OpLte) expression
+	// & 
+	| expression (OpBitAnd) expression
+	// ^ 
+	| expression (OpBitXor) expression
+	// | 
+	| expression (OpBitOr) expression
+	// && 
+	| expression (OpAnd) expression
+	// || 
+	| expression (OpOr) expression
+	// assigns
+	| Variable opAssingAny expression
 	| Boolean
-((OpInc | OpDec) Variable);
-exUnary:
-	exUnaryIncDec
-	| ((OpPlus | OpMinus | OpBitNeg | OpNeg) exBinMulDivMod);
-
-//    * / %
-exBinMulDivMod:
-	exUnary
-	| exBinMulDivMod (OpMul | OpDiv | OpMod) exUnary;
-
-//    + -
-exBinPlusMinus:
-	exBinMulDivMod
-	| exBinPlusMinus (OpPlus | OpMinus) exBinMulDivMod;
-
-// << >> 
-exBinShift:
-	exBinPlusMinus
-	| exBinShift (OpBitShiftLeft | OpBitShiftRight) exBinPlusMinus;
-
-// == != 
-exBinIsEqNotEq:
-	exBinShift
-	| exBinIsEqNotEq (OpEq | OpEqNot) exBinShift;
-
-// < > <= >= 
-exBinLQ:
-	exBinIsEqNotEq
-	|  exBinIsEqNotEq (OpGt | OpGte | OpLt | OpLte) exBinLQ ;
-
-// & 
-exBinBitAnd: exBinLQ | exBinBitAnd (OpBitAnd) exBinLQ;
-
-// ^ 
-exBinBitXor: exBinBitAnd | exBinBitXor (OpBitXor) exBinBitAnd;
-
-// | 
-exBinBitOr: exBinBitXor | exBinBitOr (OpBitOr) exBinBitXor;
-
-// && 
-exBinAnd: exBinBitOr | 
-exBinAnd (OpAnd) exBinBitOr;
-
-// || 
-exBinOr: exBinAnd | exBinOr (OpOr) exBinAnd;
-
-// assign
-exAssign: Variable opAssingAny exBinOr;
+	| Number
+	| String
+	| Variable
+	;
 
 opAssingAny:
 	OpAssign
@@ -85,6 +74,8 @@ opAssingAny:
 	| OpAssignAnd
 	| OpAssignOr
 	| OpAssignXor;
+
+Boolean: (True | False);
 
 /*
  * Lexer
@@ -171,4 +162,3 @@ fragment Char: [a-zA-Z];
 
 Variable: Char (Char | Digits)*;
 Number: (NumberPrefBin | NumberPrefHex)? Digits+;
-Boolean: True | False;
