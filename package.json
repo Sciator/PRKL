@@ -1,0 +1,11 @@
+{
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@types/antlr4": "^4.7.1",
+    "@types/node": "^13.13.4",
+    "antlr4": "^4.8.0"
+  }
+}

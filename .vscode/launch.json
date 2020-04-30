@@ -10,7 +10,20 @@
       // "actionFile": "grammars/exampleActions.js",
       "startRule": "start",
       "printParseTree": true,
-      "visualParseTree": false
+      "visualParseTree": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start interpreter",
+      "console": "integratedTerminal",
+      "program": "${workspaceFolder}/index.ts",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/bin/**/*.js"
+      ]
     }
   ]
 }
