@@ -1,3 +1,5 @@
 /parser
 /.antlr
 /Examples
+/node_modules
+/bin
