@@ -20,13 +20,12 @@ stDoWhile:
 stFor:
 	For ParRoundBeg expression? Semicolon expression? Semicolon expression? ParRoundEnd statement;
 
-value: expression | String;
-
 // operators by precedence 
 expression:
 	fncCall
-	// ++ -- - + ! ~
+	// ++ -- 
 	| ((OpInc | OpDec) Variable)
+	// - + ! ~
 	| ((OpPlus | OpMinus | OpBitNeg | OpNeg) expression)
 	//    * / %
 	| expression (OpMul | OpDiv | OpMod) expression
@@ -48,8 +47,7 @@ expression:
 	| expression (OpAnd) expression
 	// || 
 	| expression (OpOr) expression
-	// assigns
-	| Variable opAssingAny expression
+	| assign
 	| Boolean
 	| number
 	| String
@@ -60,22 +58,26 @@ arguments: (expression (Comma expression)*)?;
 
 fncCall: Variable ParRoundBeg arguments ParRoundEnd;
 
-opAssingAny:
-	OpAssign
-	| OpAssignMul
-	| OpAssignDiv
-	| OpAssignMod
-	| OpAssignPlus
-	| OpAssignMinus
-	| OpAssignShiftLeft
-	| OpAssignShiftRight
-	| OpAssignAnd
-	| OpAssignOr
-	| OpAssignXor;
+assign:
+	Variable OpAssign expression
+	| Variable opAssignSpecial expression;
+
+opAssignSpecial:
+	(
+		OpMul
+		| OpDiv
+		| OpMod
+		| OpPlus
+		| OpMinus
+		| OpBitShiftLeft
+		| OpBitShiftRight
+		| OpAnd
+		| OpOr
+		| OpBitXor
+	) OpAssign;
 
 Boolean: (True | False);
 number: (NumberPrefBin | NumberPrefHex)? Digits+;
-
 
 /*
  * Lexer
@@ -97,7 +99,6 @@ Char: '\'' ('\\' . | .) '\'';
 Semicolon: ';';
 Colon: ':';
 Comma: ',';
-
 
 // - operators
 OpInc: '++';
@@ -129,16 +130,6 @@ OpAnd: '&&' | 'and' | 'AND';
 OpOr: '||' | 'or' | 'OR';
 
 OpAssign: '=';
-OpAssignMul: '*=';
-OpAssignDiv: '/=';
-OpAssignMod: '%=';
-OpAssignPlus: '+=';
-OpAssignMinus: '-=';
-OpAssignShiftLeft: '<<=';
-OpAssignShiftRight: '>>=';
-OpAssignAnd: '&=';
-OpAssignOr: '|=';
-OpAssignXor: '^=';
 
 // - parenthesis
 ParCurBeg: '{';
@@ -156,7 +147,6 @@ While: 'while' | 'WHILE';
 Do: 'do' | 'DO';
 True: 'true' | 'TRUE';
 False: 'false' | 'FALSE';
-
 
 NumberPrefBin: '0' ('b' | 'B');
 NumberPrefHex: '0' ('x' | 'X');
