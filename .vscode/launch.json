@@ -10,7 +10,7 @@
       // "actionFile": "grammars/exampleActions.js",
       "startRule": "start",
       "printParseTree": true,
-      "visualParseTree": true
+      "visualParseTree": false
     }
   ]
 }
