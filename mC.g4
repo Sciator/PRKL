@@ -24,8 +24,7 @@ value: expression | String;
 
 // operators by precedence 
 expression:
-	// function call
-	Variable ParRoundBeg arguments ParRoundEnd
+	fncCall
 	// ++ -- - + ! ~
 	| ((OpInc | OpDec) Variable)
 	| ((OpPlus | OpMinus | OpBitNeg | OpNeg) expression)
@@ -52,12 +51,14 @@ expression:
 	// assigns
 	| Variable opAssingAny expression
 	| Boolean
-	| Number
+	| number
 	| String
 	| Char
 	| Variable;
 
-arguments:(expression (Comma expression)*)?;
+arguments: (expression (Comma expression)*)?;
+
+fncCall: Variable ParRoundBeg arguments ParRoundEnd;
 
 opAssingAny:
 	OpAssign
@@ -73,10 +74,21 @@ opAssingAny:
 	| OpAssignXor;
 
 Boolean: (True | False);
+number: (NumberPrefBin | NumberPrefHex)? Digits+;
+
 
 /*
  * Lexer
  */
+
+Ws: [ ] -> skip;
+Nl: [\n\r] -> skip;
+
+CommentMlBeg: '\\*';
+CommentMlEnd: '*\\';
+CommentSl: '//';
+
+Comment: (CommentMlBeg .*? CommentMlEnd | CommentSl .*? Nl) -> skip;
 
 String: '"' ('\\"' | .)*? '"';
 Char: '\'' ('\\' . | .) '\'';
@@ -86,9 +98,6 @@ Semicolon: ';';
 Colon: ':';
 Comma: ',';
 
-CommentMlBeg: '\\*';
-CommentMlEnd: '*\\';
-CommentSl: '//';
 
 // - operators
 OpInc: '++';
@@ -145,18 +154,16 @@ Else: 'else' | 'ELSE';
 For: 'for' | 'FOR';
 While: 'while' | 'WHILE';
 Do: 'do' | 'DO';
-Int: 'int' | 'INT';
 True: 'true' | 'TRUE';
 False: 'false' | 'FALSE';
 
-Ws: [ ] -> skip;
-Nl: [\n\r] -> skip;
 
-fragment NumberPrefBin: '0' ('b' | 'B');
-fragment NumberPrefHex: '0' ('x' | 'X');
+NumberPrefBin: '0' ('b' | 'B');
+NumberPrefHex: '0' ('x' | 'X');
 
-fragment Digits: [0-9]+;
+Digits: [0-9]+;
+
 fragment AZ: [a-zA-Z];
 
 Variable: AZ (AZ | Digits)*;
-Number: (NumberPrefBin | NumberPrefHex)? Digits+;
+
