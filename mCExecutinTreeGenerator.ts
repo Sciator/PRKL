@@ -3,15 +3,75 @@ import { InputStream, CommonTokenStream } from "antlr4";
 import { mCLexer } from "./parser/mCLexer";
 import { mCParser } from "./parser/mCParser";
 import { mCListener } from "./parser/mCListener";
-
 import * as fs from "fs";
-import { readLineSync } from "./common";
-import { TNodeVariable, ENodeType, TNodeConstant, TNode, EOperationType } from "./ExecutionTree";
+import { ENodeType, TNode, EOperationType } from "./ExecutionTree";
 
 
 export class mCExecutinTreeGenerator {
   private static readonly Listener = (class extends mCListener {
+    public tree: TNode;
 
+    exitStatement(ctx) {
+      ctx.res = ctx.children.map(x => x.res).filter(x => x !== undefined);
+      if (ctx.res.length === 1)
+        ctx.res = ctx.res[0];
+    }
+
+    exitStFor(ctx) {
+      const then = ctx.statement().res;
+      const node: TNode = {
+        type: ENodeType.for,
+        then,
+      };
+
+      // removing `for` `(` and `)` `statement`
+      let c = ctx.children.slice(2, -2);
+      const pre = c[0].res;
+      c = c.slice(pre ? 2 : 1);
+      const cond = c[0].res;
+      c = c.slice(cond ? 2 : 1);
+      const step = c[0]?.res;
+      if (pre) node.pre = pre;
+      if (cond) node.cond = cond;
+      if (step) node.step = step;
+      ctx.res = node;
+    }
+
+    exitStIf(ctx) {
+      const cond = ctx.expression().res;
+      const [then, el] = ctx.statement().map(x => x.res);
+      ctx.res = {
+        type: ENodeType.if,
+        cond,
+        then,
+      } as TNode;
+      if (el)
+        ctx.res.el = el;
+    }
+
+    exitStDoWhile(ctx) {
+      this._exitWhile(ctx, true);
+    }
+
+    exitStWhile(ctx) {
+      this._exitWhile(ctx);
+    }
+
+    _exitWhile(ctx, condAfter?: true) {
+      const cond = ctx.expression().res;
+      const then = ctx.statement().res;
+      ctx.res = {
+        type: ENodeType.while,
+        cond,
+        then,
+      } as TNode;
+      if (condAfter)
+        ctx.res.condAfter = true;
+    }
+
+    exitStart(ctx) {
+      this.tree = ctx.children.map(x => x.res).filter(x => x !== undefined);
+    }
 
     exitFncCall(ctx) {
       const [{ res: fnc }, , { res: args }] = ctx.children;
@@ -146,6 +206,7 @@ export class mCExecutinTreeGenerator {
 
     const listener = new mCExecutinTreeGenerator.Listener();
     (antlr4 as any).tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
+    return listener.tree;
   }
 }
 
