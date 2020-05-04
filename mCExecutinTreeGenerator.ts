@@ -70,7 +70,10 @@ export class mCExecutinTreeGenerator {
     }
 
     exitStart(ctx) {
-      this.tree = ctx.children.map(x => x.res).filter(x => x !== undefined);
+      ctx.res = ctx.children.map(x => x.res).filter(x => x !== undefined);
+      if (ctx.res.length === 1)
+        ctx.res = ctx.res[0];
+      this.tree = ctx.res;
     }
 
     exitFncCall(ctx) {
