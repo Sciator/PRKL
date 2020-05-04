@@ -23,6 +23,7 @@ stFor:
 // operators by precedence 
 expression:
 	fncCall
+	| ParRoundBeg expression ParRoundEnd
 	// ++ -- 
 	| ((OpInc | OpDec) Variable)
 	// - + ! ~
@@ -92,7 +93,7 @@ CommentSl: '//';
 
 Comment: (CommentMlBeg .*? CommentMlEnd | CommentSl .*? Nl) -> skip;
 
-String: '"' ('\\"' | .)*? '"';
+String: StringDelimiter CharSequence StringDelimiter;
 Char: '\'' ('\\' . | .) '\'';
 
 // special symbols
@@ -153,7 +154,9 @@ NumberPrefHex: '0' ('x' | 'X');
 
 Digits: [0-9]+;
 
-fragment AZ: [a-zA-Z];
 
 Variable: AZ (AZ | Digits)*;
 
+fragment StringDelimiter: '"';
+fragment AZ: [a-zA-Z];
+fragment CharSequence: ('\\"' | ~["\r\n])+?;
