@@ -27,9 +27,9 @@ expression:
 	| ((OpInc | OpDec) Variable)
 	// - + ! ~
 	| ((OpPlus | OpMinus | OpBitNeg | OpNeg) expression)
-	//    * / %
+	// * / %
 	| expression (OpMul | OpDiv | OpMod) expression
-	//    + -
+	// + -
 	| expression (OpPlus | OpMinus) expression
 	// << >> 
 	| expression (OpBitShiftLeft | OpBitShiftRight) expression
