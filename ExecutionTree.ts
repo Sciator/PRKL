@@ -33,12 +33,12 @@ export const enum EOperationType {
 
 export type TNode = TNodeStatement;
 
-export type TNodeStatement = TNodeExpression | TNodeStIf | TNodeStWhile | TNodeStFor;
+export type TNodeStatement = TNodeExpression | TNodeStIf | TNodeStWhile | TNodeStFor | TNodeStatement[];
 export type TNodeStIf = {
   type: ENodeType.if,
   cond: TNodeExpression,
   then: TNodeStatement,
-  else?: TNodeStatement,
+  el?: TNodeStatement,
 };
 export type TNodeStWhile = {
   type: ENodeType.while,
@@ -49,6 +49,7 @@ export type TNodeStWhile = {
 };
 export type TNodeStFor = {
   type: ENodeType.for,
+  then: TNodeStatement,
   pre?: TNodeExpression,
   step?: TNodeExpression,
   cond?: TNodeExpression,
