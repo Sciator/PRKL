@@ -168,9 +168,16 @@ export class mCExecutinTreeGenerator {
       let text = ctx.getText() as string;
       let node: TNode;
       switch (typeCode) {
-        case mCParser.String:
         case mCParser.Char:
-          // todo: parser by měl vracet string bez "
+          // removing ' symbols
+          text = text.slice(1, -1);
+          node = {
+            type: ENodeType.constant,
+            value: text.charCodeAt(0),
+          };
+          break;
+        case mCParser.String:
+          // todo: parser by měl vracet string a char bez "/'
           // removing " symbols
           text = text.slice(1, -1);
           node = {
