@@ -139,6 +139,10 @@ export class mCExecutinTreeGenerator {
             };
           break;
         case 3:
+          if (ctx.children[0]?.symbol.type === mCParser.ParRoundBeg) {
+            node = ctx.children[1].res;
+            break;
+          }
           const [{ res: arg1 }, { symbol: { text: operation } }, { res: arg2 }] = ctx.children;
           node = {
             type: ENodeType.operation,
