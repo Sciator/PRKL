@@ -20,6 +20,19 @@ export const readLineSync = () => {
   return rtnval;
 };
 
+export const readIntSync = (): number => {
+  let num: number = NaN;
+  while (true) {
+    const res = readLineSync();
+    num = Number.parseInt(res, 10);
+    if (Number.isNaN(num))
+      console.error("zadaná hodnota není číslo, zkus to znovu");
+    else break;
+  }
+  return num;
+};
+
+
 
 export const isBoolean = (obj: any) => {
   return obj === true || obj === false;
