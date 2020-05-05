@@ -15,10 +15,31 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Start interpreter",
+      "name": "Start .mC",
       "console": "integratedTerminal",
       "program": "${workspaceFolder}/index.ts",
-      "args": ["./testing.mC", "output.json", "-f", "-i"],
+      "args": [
+        "./testing.mC",
+        "output.json",
+        "-f",
+        "-i"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/bin/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start json interpreter",
+      "console": "integratedTerminal",
+      "program": "${workspaceFolder}/index.ts",
+      "args": [
+        "./output.json",
+      ],
       "skipFiles": [
         "<node_internals>/**"
       ],

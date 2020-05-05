@@ -1,0 +1,280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/TNode",
+  "definitions": {
+    "TNode": {
+      "$ref": "#/definitions/TNodeStatement"
+    },
+    "TNodeStatement": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TNodeExpression"
+        },
+        {
+          "$ref": "#/definitions/TNodeStIf"
+        },
+        {
+          "$ref": "#/definitions/TNodeStWhile"
+        },
+        {
+          "$ref": "#/definitions/TNodeStFor"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TNodeStatement"
+          }
+        }
+      ]
+    },
+    "TNodeExpression": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TNodeVariable"
+        },
+        {
+          "$ref": "#/definitions/TNodeConstant"
+        },
+        {
+          "$ref": "#/definitions/TNodeOperation"
+        },
+        {
+          "$ref": "#/definitions/TNodeExpressionAssign"
+        }
+      ]
+    },
+    "TNodeVariable": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "variable"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "TNodeConstant": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "constant"
+          ]
+        },
+        "value": {
+          "type": [
+            "boolean",
+            "string",
+            "number"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "TNodeOperation": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "type": "string",
+              "enum": [
+                "func"
+              ]
+            },
+            "fnc": {
+              "$ref": "#/definitions/TNodeVariable"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "operation"
+              ]
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TNodeExpression"
+              }
+            }
+          },
+          "required": [
+            "args",
+            "fnc",
+            "operation",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "operation": {
+              "type": "string",
+              "enum": [
+                "!",
+                "+",
+                "-",
+                "*",
+                "/",
+                "%",
+                "==",
+                "!=",
+                "<",
+                ">",
+                "<=",
+                ">=",
+                "<<",
+                ">>",
+                "~",
+                "&",
+                "^",
+                "|",
+                "&&",
+                "||"
+              ]
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "operation"
+              ]
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TNodeExpression"
+              }
+            }
+          },
+          "required": [
+            "args",
+            "operation",
+            "type"
+          ]
+        }
+      ]
+    },
+    "TNodeExpressionAssign": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "assign"
+          ]
+        },
+        "target": {
+          "$ref": "#/definitions/TNodeVariable"
+        },
+        "expr": {
+          "$ref": "#/definitions/TNodeExpression"
+        }
+      },
+      "required": [
+        "type",
+        "target",
+        "expr"
+      ],
+      "additionalProperties": false
+    },
+    "TNodeStIf": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "if"
+          ]
+        },
+        "cond": {
+          "$ref": "#/definitions/TNodeExpression"
+        },
+        "then": {
+          "$ref": "#/definitions/TNodeStatement"
+        },
+        "el": {
+          "$ref": "#/definitions/TNodeStatement"
+        }
+      },
+      "required": [
+        "type",
+        "cond",
+        "then"
+      ],
+      "additionalProperties": false
+    },
+    "TNodeStWhile": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "while"
+          ]
+        },
+        "cond": {
+          "$ref": "#/definitions/TNodeExpression"
+        },
+        "then": {
+          "$ref": "#/definitions/TNodeStatement"
+        },
+        "condAfter": {
+          "type": "boolean",
+          "enum": [
+            true
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "cond",
+        "then"
+      ],
+      "additionalProperties": false
+    },
+    "TNodeStFor": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "for"
+          ]
+        },
+        "then": {
+          "$ref": "#/definitions/TNodeStatement"
+        },
+        "pre": {
+          "$ref": "#/definitions/TNodeExpression"
+        },
+        "step": {
+          "$ref": "#/definitions/TNodeExpression"
+        },
+        "cond": {
+          "$ref": "#/definitions/TNodeExpression"
+        }
+      },
+      "required": [
+        "type",
+        "then"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
