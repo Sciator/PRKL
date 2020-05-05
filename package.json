@@ -1,17 +1,21 @@
 {
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "pkg ./bin/index.js --out-path ./build/"
   },
   "dependencies": {
+    "antlr4": "^4.8.0",
+    "jsonschema": "^1.2.6",
+    "chalk": "^4.0.0",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
     "@types/antlr4": "^4.7.1",
     "@types/chalk": "^2.2.0",
     "@types/jsonschema": "^1.1.1",
     "@types/node": "^13.13.4",
     "@types/yargs": "^15.0.4",
-    "antlr4": "^4.8.0",
-    "chalk": "^4.0.0",
-    "jsonschema": "^1.2.6",
-    "yargs": "^15.3.1"
+    "pkg": "^4.4.8"
   }
 }
