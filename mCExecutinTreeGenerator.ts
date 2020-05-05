@@ -208,6 +208,14 @@ export class mCExecutinTreeGenerator {
     }
   });
 
+  private static readonly ErrorListener = (class extends (antlr4 as any).error.ErrorListener {
+    public syntaxError(recognizer, offendingSymbol, line, column, msg, err) {
+      this.errors.push({ column, line, msg });
+    }
+
+    public errors: { msg: string, line: number, column: number }[] = [];
+  });
+
   public static run(inputFile: string): TNode {
     const input = fs.readFileSync(inputFile).toString();
     const chars = new InputStream(input);
@@ -216,7 +224,17 @@ export class mCExecutinTreeGenerator {
     // todo: error listener (vyhodí error s odkazem na chyby ...)
     const parser = new mCParser(tokens);
     (parser as any).buildParseTrees = true;
+
+    const listenerError = new mCExecutinTreeGenerator.ErrorListener(inputFile);
+    (parser as any).removeErrorListeners();
+    (parser as any).addErrorListener(listenerError);
+
     const tree = parser.start();
+    if (listenerError.errors.length) {
+      throw new Error(`Syntax error:\n${listenerError.errors
+        .map((x, i) => `Error ${i}:\n${inputFile}:${x.line}:${x.column}  ${x.msg}\n`)
+        .join("\n")}`);
+    }
 
     const listener = new mCExecutinTreeGenerator.Listener();
     (antlr4 as any).tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
