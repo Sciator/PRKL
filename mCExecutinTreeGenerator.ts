@@ -139,7 +139,7 @@ export class mCExecutinTreeGenerator {
             };
           break;
         case 3:
-          if (ctx.children[0]?.symbol.type === mCParser.ParRoundBeg) {
+          if (ctx.children[0]?.symbol?.type === mCParser.ParRoundBeg) {
             node = ctx.children[1].res;
             break;
           }
@@ -208,12 +208,12 @@ export class mCExecutinTreeGenerator {
     }
   });
 
-  // tood: input
-  public static run(/* input */) {
-    const input = fs.readFileSync("./testing.mC").toString();
+  public static run(inputFile: string): TNode {
+    const input = fs.readFileSync(inputFile).toString();
     const chars = new InputStream(input);
     const lexer = new mCLexer(chars);
     const tokens = new CommonTokenStream(lexer as any);
+    // todo: error listener (vyhodí error s odkazem na chyby ...)
     const parser = new mCParser(tokens);
     (parser as any).buildParseTrees = true;
     const tree = parser.start();
