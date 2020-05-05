@@ -1,5 +1,16 @@
 {
   "json.schemas": [
-    {"fileMatch": ["./output.json"], "schema": true, "url": "./mCTree.schema.json"}
-  ]
+    {
+      "fileMatch": [
+        "./output.json"
+      ],
+      "schema": true,
+      "url": "./mCTree.schema.json"
+    }
+  ],
+  "files.exclude": {
+    "bin/": true,
+    "node_modules": true,
+    ".antlr/": true
+  }
 }

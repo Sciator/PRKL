@@ -1,6 +1,5 @@
 /parser
 /.antlr
-/Examples
 /node_modules
 /bin
 /output.json
