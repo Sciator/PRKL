@@ -18,6 +18,7 @@
       "name": "Start interpreter",
       "console": "integratedTerminal",
       "program": "${workspaceFolder}/index.ts",
+      "args": ["./testing.mC", "output.json", "-f", "-i"],
       "skipFiles": [
         "<node_internals>/**"
       ],
