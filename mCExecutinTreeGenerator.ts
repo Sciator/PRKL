@@ -11,13 +11,13 @@ export class mCExecutinTreeGenerator {
   private static readonly Listener = (class extends mCListener {
     public tree: TNode;
 
-    exitStatement(ctx) {
+    public exitStatement(ctx) {
       ctx.res = ctx.children.map(x => x.res).filter(x => x !== undefined);
       if (ctx.res.length === 1)
         ctx.res = ctx.res[0];
     }
 
-    exitStFor(ctx) {
+    public exitStFor(ctx) {
       const then = ctx.statement().res;
       const node: TNode = {
         type: ENodeType.for,
@@ -37,7 +37,7 @@ export class mCExecutinTreeGenerator {
       ctx.res = node;
     }
 
-    exitStIf(ctx) {
+    public exitStIf(ctx) {
       const cond = ctx.expression().res;
       const [then, el] = ctx.statement().map(x => x.res);
       ctx.res = {
@@ -49,15 +49,15 @@ export class mCExecutinTreeGenerator {
         ctx.res.el = el;
     }
 
-    exitStDoWhile(ctx) {
+    public exitStDoWhile(ctx) {
       this._exitWhile(ctx, true);
     }
 
-    exitStWhile(ctx) {
+    public exitStWhile(ctx) {
       this._exitWhile(ctx);
     }
 
-    _exitWhile(ctx, condAfter?: true) {
+    public _exitWhile(ctx, condAfter?: true) {
       const cond = ctx.expression().res;
       const then = ctx.statement().res;
       ctx.res = {
@@ -69,14 +69,14 @@ export class mCExecutinTreeGenerator {
         ctx.res.condAfter = true;
     }
 
-    exitStart(ctx) {
+    public exitStart(ctx) {
       ctx.res = ctx.children.map(x => x.res).filter(x => x !== undefined);
       if (ctx.res.length === 1)
         ctx.res = ctx.res[0];
       this.tree = ctx.res;
     }
 
-    exitFncCall(ctx) {
+    public exitFncCall(ctx) {
       const [{ res: fnc }, , { res: args }] = ctx.children;
       ctx.res = {
         type: ENodeType.operation,
@@ -86,16 +86,16 @@ export class mCExecutinTreeGenerator {
       } as TNode;
     }
 
-    exitArguments(ctx) {
+    public exitArguments(ctx) {
       // filtering `,` between arguments
       ctx.res = ctx.children.map(x => x.res).filter(x => x !== undefined);
     }
 
-    exitOpAssignSpecial(ctx) {
+    public exitOpAssignSpecial(ctx) {
       ctx.res = ctx.children[0].symbol.text;
     }
 
-    exitAssign(ctx) {
+    public exitAssign(ctx) {
       const [{ res: target }, , { res: exprMain }] = ctx.children;
       let expr: TNode = exprMain;
       if (ctx.opAssignSpecial()) {
@@ -113,7 +113,7 @@ export class mCExecutinTreeGenerator {
       } as TNode;
     }
 
-    exitExpression(ctx) {
+    public exitExpression(ctx) {
       let node: TNode;
       switch (ctx.children.length) {
         case 1:
@@ -154,7 +154,7 @@ export class mCExecutinTreeGenerator {
       ctx.res = node;
     }
 
-    exitNumber(ctx) {
+    public exitNumber(ctx) {
       const radix
         = (ctx.NumberPrefHex() && 16)
         || (ctx.NumberPrefBin() && 2)
@@ -167,7 +167,7 @@ export class mCExecutinTreeGenerator {
       } as TNode;
     }
 
-    visitTerminal(ctx) {
+    public visitTerminal(ctx) {
       const typeCode = ctx.symbol.type;
       let text = ctx.getText() as string;
       let node: TNode;
