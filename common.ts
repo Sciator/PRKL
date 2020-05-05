@@ -74,3 +74,8 @@ export const formatString = (str: string, args: number[]): string => {
 export const isBoolean = (obj: any) => {
   return obj === true || obj === false;
 };
+
+/** helper function for throwing errors inside expressions */
+export const throwReturn = <T>(msg: string): T => {
+  throw new Error(msg);
+};
