@@ -31,7 +31,7 @@ export const runCli = () =>
           processFile(input, output, intepret, forceOverwrite);
           console.info(chalk.green(`Done !`));
         } catch (e) {
-          console.error(chalk.red(e.message));
+          console.error(chalk.redBright(e.message));
         }
       }))
     .argv
