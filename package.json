@@ -5,7 +5,11 @@
   },
   "dependencies": {
     "@types/antlr4": "^4.7.1",
+    "@types/chalk": "^2.2.0",
     "@types/node": "^13.13.4",
-    "antlr4": "^4.8.0"
+    "@types/yargs": "^15.0.4",
+    "antlr4": "^4.8.0",
+    "chalk": "^4.0.0",
+    "yargs": "^15.3.1"
   }
 }
