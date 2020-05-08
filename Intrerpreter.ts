@@ -2,7 +2,7 @@ import {
   TNode, TNodeExpression, TNodeVariable, ENodeType,
   EOperationType, TNodeStFor, TNodeStWhile, TNodeExpressionAssign, TNodeConstant, TNodeStIf, TNodeOperation
 } from "./ExecutionTree";
-import { readLineSync, readIntSync, formatString } from "./common";
+import { readIntSync, formatString } from "./common";
 import { isBoolean } from "util";
 
 export class Interpreter {
