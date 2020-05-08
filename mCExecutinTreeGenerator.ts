@@ -221,7 +221,6 @@ export class mCExecutinTreeGenerator {
     const chars = new InputStream(input);
     const lexer = new mCLexer(chars);
     const tokens = new CommonTokenStream(lexer as any);
-    // todo: error listener (vyhodí error s odkazem na chyby ...)
     const parser = new mCParser(tokens);
     (parser as any).buildParseTrees = true;
 
