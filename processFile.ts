@@ -16,7 +16,6 @@ export const processFile = (input: string, output: "" | string, interpret: boole
   const ext = Path.extname(input).slice(1).toLowerCase();
 
   const tree =
-    // todo: validace json ?
     (ext === "json") && readJsonTreeFile(input)
     || (ext === "mc") && mCExecutinTreeGenerator.run(input)
     || throwReturn(`invalid file extension ${ext}`)
