@@ -15,7 +15,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Start .mC",
+      "name": "Generate JSON from .mC and run",
       "console": "integratedTerminal",
       "program": "${workspaceFolder}/index.ts",
       "args": [
@@ -39,6 +39,22 @@
       "program": "${workspaceFolder}/index.ts",
       "args": [
         "./output.json",
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/bin/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start .mC",
+      "console": "integratedTerminal",
+      "program": "${workspaceFolder}/index.ts",
+      "args": [
+        "${file}"
       ],
       "skipFiles": [
         "<node_internals>/**"
