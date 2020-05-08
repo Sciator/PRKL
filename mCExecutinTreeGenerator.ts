@@ -225,7 +225,7 @@ export class mCExecutinTreeGenerator {
     const parser = new mCParser(tokens);
     (parser as any).buildParseTrees = true;
 
-    const listenerError = new mCExecutinTreeGenerator.ErrorListener(inputFile);
+    const listenerError = new mCExecutinTreeGenerator.ErrorListener();
     (parser as any).removeErrorListeners();
     (parser as any).addErrorListener(listenerError);
 
