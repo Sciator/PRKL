@@ -15,7 +15,10 @@ export const runCli = () =>
           alias: "out", default: "",
         })
         .demandOption("file")
-        .option("interpret", { alias: "i", boolean: true })
+        .option("interpret", {
+          alias: "i", boolean: true, describe: "Run program after compiling."
+            + " Program is interpreted automaticaly if no output file given (even without this parameter)",
+        })
         .option("force", {
           alias: "f", boolean: true,
           describe: "forces overwriting output file when already exists",
