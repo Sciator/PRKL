@@ -1,5 +1,5 @@
 
-Runable executables of interpreter availeble in [releases](https://github.com/TheRWe/PRKL/releases)
+# Runable executables of interpreter availeble in [releases](https://github.com/TheRWe/PRKL/releases)
 
 # USAGE ARGUMENTS
 `exec` is shortuct executable of interpreter (in `./build/` or downloaded from [releses](https://github.com/TheRWe/PRKL/releases))
