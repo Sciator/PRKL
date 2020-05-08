@@ -2,7 +2,7 @@
 Runable executables of interpreter availeble in [releases]()
 
 # USAGE ARGUMENTS
-`exec` is shortuct executable of interpreter (in `./build/` or downloaded from [releses]())
+`exec` is shortuct executable of interpreter (in `./build/` or downloaded from [releses](https://github.com/TheRWe/PRKL/releases))
 
  - `-h` show help
  - `exec InputFile [OutputFile]`
@@ -28,11 +28,10 @@ When .mC file contains syntax error, compilation is aborted and all error is out
 Running `.json` file can result in `Error reading json file`. All json file has to satisfy `mCTree.schema.json` schema to be runable by interpreter.
 
 
-todo linky
 ## BUILDING
- 0) have [nodejs]() installed 
- 0) build parser from mC.g4 (or download parser in [releases]())
-    - download and instal antlr from [webpage](https://www.antlr.org/)
+ 0) have [nodejs](https://nodejs.org/) installed 
+ 0) build parser from mC.g4 (or download parser in [releases](https://github.com/TheRWe/PRKL/releases))
+    - download and instal [antlr](https://www.antlr.org/)
     - build javascript parser into `./parser/` file
  0) run `npm run build-full` script
  0) builded executables is in `./build/` dir
