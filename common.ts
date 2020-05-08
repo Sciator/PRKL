@@ -26,6 +26,7 @@ export const readIntSync = (): number => {
     const res = readLineSync();
     num = Number.parseInt(res, 10);
     if (Number.isNaN(num))
+      // tslint:disable-next-line: no-console
       console.error("zadaná hodnota není číslo, zkus to znovu");
     else break;
   }

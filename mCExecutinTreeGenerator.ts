@@ -7,6 +7,7 @@ import * as fs from "fs";
 import { ENodeType, TNode, EOperationType } from "./ExecutionTree";
 
 
+// tslint:disable-next-line: class-name
 export class mCExecutinTreeGenerator {
   private static readonly Listener = (class extends mCListener {
     public tree: TNode;

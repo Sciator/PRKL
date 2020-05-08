@@ -8,6 +8,7 @@ import { validate } from "jsonschema";
 import * as treeSchema from "./mCTree.schema.json";
 import chalk from "chalk";
 
+// tslint:disable: no-console
 export const processFile = (input: string, output: "" | string, interpret: boolean, forceOverwrite?: boolean) => {
   if (!existsSync(input))
     throw new Error(`Invalid input, file doesn't exists: ${input}`);

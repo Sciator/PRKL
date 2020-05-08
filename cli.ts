@@ -2,6 +2,7 @@ import yargs from "yargs";
 import chalk from "chalk";
 import { processFile } from "./processFile";
 
+// tslint:disable: no-console
 export const runCli = () =>
   yargs
     .command(
